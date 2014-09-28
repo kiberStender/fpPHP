@@ -14,8 +14,17 @@ class Nothing extends Maybe{
     
     private function __construct() {}
     
+    private static $not = null;
+    
+    /**
+     * 
+     * @return Maybe
+     */
     public static final function Nothing(){
-        return new Nothing();
+        if(!isset(self::$not)){
+            self::$not = new Nothing();
+        }
+        return self::$not;
     }
     
     public function getOrElse(Fn $f) {
