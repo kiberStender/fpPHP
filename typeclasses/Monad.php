@@ -8,7 +8,7 @@
 require_once '../fn/Fn1.php';
 require_once './Functor.php';
 
-abstract class Monad extends Functor{
+abstract class Monad implements Functor{
     
     /**
      * Haskell >>= (bind) function
