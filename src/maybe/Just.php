@@ -22,4 +22,8 @@ class Just extends Maybe{
     public function get() {
         return $this->value;
     }
+    
+    public function __toString() {
+        return "Just($this->value)";
+    }
 }

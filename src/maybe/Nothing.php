@@ -23,4 +23,8 @@ class Nothing extends Maybe{
     public function get() {
         throw new Exception("No such element");
     }
+    
+    public function __toString() {
+        return "";
+    }
 }
