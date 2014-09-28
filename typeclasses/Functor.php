@@ -3,7 +3,7 @@
  *
  * @author sirkleber
  */
-require_once '../Fn/Fn1.php';
+require_once '../fn/Fn1.php';
 
 interface Functor {
     /**
