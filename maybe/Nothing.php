@@ -5,6 +5,7 @@
  *
  * @author sirkleber
  */
+require_once '../fn/Fn.php';
 require_once './Maybe.php';
 
 class Nothing extends Maybe{
