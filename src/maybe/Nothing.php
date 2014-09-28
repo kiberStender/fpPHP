@@ -5,8 +5,10 @@
  *
  * @author sirkleber
  */
-require_once '../fn/Fn.php';
-require_once './Maybe.php';
+set_include_path(dirname(__FILE__) . "/../");
+
+require_once 'fn/Fn.php';
+require_once 'Maybe.php';
 
 class Nothing extends Maybe{
     

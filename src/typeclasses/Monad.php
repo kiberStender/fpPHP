@@ -5,8 +5,10 @@
  *
  * @author sirkleber
  */
-require_once '../fn/Fn1.php';
-require_once './Functor.php';
+
+set_include_path(dirname(__FILE__) . "/../");
+require_once 'fn/Fn1.php';
+require_once 'Functor.php';
 
 abstract class Monad implements Functor{
     

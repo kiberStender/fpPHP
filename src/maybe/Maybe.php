@@ -5,8 +5,10 @@
  *
  * @author sirkleber
  */
-require_once '../fn/Fn.php';
-require_once '../typeclasses/Monad.php';
+set_include_path(dirname(__FILE__) . "/../");
+require_once "fn/Fn.php";
+require_once 'fn/Fn1.php';
+require_once 'typeclasses/Monad.php';
 
 abstract class Maybe extends Monad{
     public function map(Fn1 $f) {
