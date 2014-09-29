@@ -129,11 +129,19 @@ class KVMap extends Map{
     }
     
     public function init() {
-        
+        if($this->tail_->isEmpty()){
+            return $this->empty_();
+        } else {
+            return $this->tail_->init()->cons($this->head_);
+        }
     }
     
     public function last() {
-        
+        if($this->tail_->isEmpty()){
+            return $this->head_;
+        } else {
+            return $this->tail_->last();
+        }
     }
     
     public function maybeHead() {
