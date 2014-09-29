@@ -75,7 +75,7 @@ abstract class FTraversable extends Monad{
 
     
     public function length(){
-        return $this->foldLeft(0, new SumFoldLeft());
+        return $this->foldLeft(0, new LengthFoldLeft());
     }
 
     public function filter(Fn1 $p){
@@ -152,6 +152,12 @@ class ToStringFrm implements Fn2{
 class SumFoldLeft implements Fn2{
     public function apply($acc, $item) {
         return $acc + $item;
+    }
+}
+
+class LengthFoldLeft implements Fn2{
+    public function apply($a, $b) {
+        return $a + 1;
     }
 }
 
