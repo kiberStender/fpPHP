@@ -122,6 +122,22 @@ abstract class Traversable extends Monad{
             return $f->apply($this->head(), $this->tail()->foldRight($acc, $f));
         }
     }
+    
+    public function map(Fn1 $f) {
+        if($this->isEmpty()){
+            return $this->empty_();
+        } else {
+            return $this->tail()->cons($f->apply($this->head()));
+        }
+    }
+    
+    public function flatMap(Fn1 $f) {
+        if($this->isEmpty()){
+            return $this->empty_();
+        } else {
+            return $this->tail()->flatMap($f)->concat($f->apply($this->head()));
+        }
+    }
 }
 
 class ToStringFrm implements Fn2{
