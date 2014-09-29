@@ -26,4 +26,32 @@ class Nil extends Seq{
     }
     
     private function __construct() {}
+    
+    public function isEmpty() {
+        return true;
+    }
+    
+    public function head() {
+        throw new Exception("No such Element");
+    }
+    
+    public function tail() {
+        throw new Exception("No such Element");
+    }
+    
+    public function init() {
+        throw new Exception("No such Element");
+    }
+    
+    public function last() {
+        throw new Exception("No such Element");
+    }
+    
+    public function maybeHead() {
+        return Nothing::Nothing();
+    }
+    
+    public function maybeLast() {
+        return Nothing::Nothing();
+    }
 }
