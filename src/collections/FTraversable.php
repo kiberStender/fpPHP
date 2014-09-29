@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Description of Traversable
+ * Description of FTraversable
  *
  * @author sirkleber
  */
@@ -26,12 +26,12 @@ abstract class FTraversable extends Monad{
     public abstract function head();
     
     /**
-     * @return Traversable The array continuation
+     * @return FTraversable The array continuation
      */
     public abstract function tail();
     
     /**
-     * @return Traversable The array continuation
+     * @return FTraversable The array continuation
      */
     public abstract function init();
 
@@ -52,7 +52,7 @@ abstract class FTraversable extends Monad{
     public abstract function maybeLast();
 
     /**
-     * @return Traversable 
+     * @return FTraversable 
      */
     protected abstract function empty_();
 
@@ -68,7 +68,7 @@ abstract class FTraversable extends Monad{
      * @param prefix new collection to be concat in the end of this collection
      * @return a new collection
      */
-    public abstract function concat(Traversable $prefix);
+    public abstract function concat(FTraversable $prefix);
     
     public final function __toString(){
         return "{$this->prefix()}({$this->foldLeft("", new ToStringFrm($this->toStringFrmt()))}))";

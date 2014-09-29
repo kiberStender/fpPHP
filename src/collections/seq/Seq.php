@@ -46,7 +46,7 @@ abstract class Seq extends FTraversable{
         }
     }
     
-    public function concat(Traversable $prefix) {
+    public function concat(FTraversable $prefix) {
         return $this->helper($this, $prefix);
     }
     
