@@ -129,7 +129,7 @@ abstract class FTraversable extends Monad{
         if($this->isEmpty()){
             return $this->empty_();
         } else {
-            return $this->tail()->cons($f->apply($this->head()));
+            return $this->tail()->map($f)->cons($f->apply($this->head()));
         }
     }
     
