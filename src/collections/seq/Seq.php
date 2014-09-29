@@ -5,26 +5,29 @@
  *
  * @author sirkleber
  */
-set_include_path(dirname(__FILE__) . "/../");
+require_once 'collections/FTraversable.php';
 
-require_once 'fn/Fn1.php';
-require_once 'fn/Fn2.php';
-require_once 'typeclasses/Monad.php';
-require_once 'maybe/Just.php';
-require_once 'maybe/Nothing.php';
-require_once 'collections/Traversable.php';
-require 'Nil.php';
-
-abstract class Seq extends Traversable{
+abstract class Seq extends FTraversable{
     
-    public static function Seq(){
-        $args = func_get_arg();
-        $nargs = func_num_args();
-        if($nargs === 0){
+    /**
+     * 
+     * @param array $args
+     * @return Seq
+     */
+    private static final function construct(array $args){
+        if(sizeof($args) === 0){
             return Nil::Nil();
         } else {
-            return new Cons($args[0], call_user_func('Seq', array_slice($args, 1)));
+            return self::construct(array_slice($args, 1))->cons($args[0]);
         }
+    }
+    
+    /**
+     * 
+     * @return Seq
+     */
+    public static final function aff(){
+        return self::construct(func_get_args());
     }
     
     protected function empty_() {
@@ -81,6 +84,85 @@ abstract class Seq extends Traversable{
     
 }
 
+class Cons extends Seq{
+    private $head_;
+    private $tail_;
+    
+    function __construct($head_, Seq $tail_) {
+        $this->head_ = $head_;
+        $this->tail_ = $tail_;
+    }
+    
+    public function isEmpty() {
+        return false;
+    }
+    
+    public function head() {
+        return $this->head_;
+    }
+    
+    public function tail() {
+        return $this->tail_;
+    }
+    
+    public function init() {
+        return $this->reverse()->tail()->reverse();
+    }
+    
+    public function last() {
+        return $this->reverse()->head();
+    }
+    
+    public function maybeHead() {
+        return new Just($this->head_);
+    }
+    
+    public function maybeLast() {
+        return new Just($this->last());
+    }
+}
+
+class Nil extends Seq{
+    private static $nil = null;
+    
+    public static function Nil(){
+        if(!isset(self::$nil)){
+            self::$nil = new Nil();
+        }
+        return self::$nil;
+    }
+    
+    private function __construct() {}
+    
+    public function isEmpty() {
+        return true;
+    }
+    
+    public function head() {
+        throw new Exception("No such Element");
+    }
+    
+    public function tail() {
+        throw new Exception("No such Element");
+    }
+    
+    public function init() {
+        throw new Exception("No such Element");
+    }
+    
+    public function last() {
+        throw new Exception("No such Element");
+    }
+    
+    public function maybeHead() {
+        return Nothing::Nothing();
+    }
+    
+    public function maybeLast() {
+        return Nothing::Nothing();
+    }
+}
+
 class SeqFrmToString implements Fn2{
     public function apply($acc, $item) {
         if($acc === ""){
@@ -92,7 +174,7 @@ class SeqFrmToString implements Fn2{
 }
 
 class SeqReverse implements Fn2{
-    public function apply(Seq $acc, $item) {
+    public function apply($acc, $item) {
         return $acc->cons($item);
     }
 }

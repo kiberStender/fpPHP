@@ -14,7 +14,7 @@ require_once 'typeclasses/Monad.php';
 require_once 'maybe/Just.php';
 require_once 'maybe/Nothing.php';
 
-abstract class Traversable extends Monad{
+abstract class FTraversable extends Monad{
     /**
      * @return Boolean Description
      */
@@ -167,7 +167,7 @@ class FilterFoldRight implements Fn2{
         $this->p = $p;
     }
 
-    public function apply($item, Traversable $acc) {
+    public function apply($item, $acc) {
         if($this->p->apply($item)){
             return $acc->cons($item);
         } else {
