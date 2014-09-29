@@ -66,7 +66,7 @@ abstract class FTraversable extends Monad{
     public abstract function concat(FTraversable $prefix);
     
     public final function __toString(){
-        return "{$this->prefix()}({$this->foldLeft("", new ToStringFrm($this->toStringFrmt()))}))";
+        return "{$this->prefix()}({$this->foldLeft("", new ToStringFrm($this->toStringFrmt()))})";
     }
 
     protected abstract function prefix();
