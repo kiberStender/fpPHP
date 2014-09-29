@@ -63,7 +63,7 @@ abstract class Seq extends FTraversable{
      * @return Seq
      */
     public function reverse(){
-        return $this->foldLeft(Seq::Seq(), new SeqReverse());
+        return $this->foldLeft($this->empty_(), new SeqReverse());
     }
     
     private function splitR($n, Seq $curL, Seq $pre){
