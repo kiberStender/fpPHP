@@ -26,7 +26,7 @@ abstract class Seq extends FTraversable{
      * 
      * @return Seq
      */
-    public static final function aff(){
+    public static final function build(){
         return self::construct(func_get_args());
     }
     
