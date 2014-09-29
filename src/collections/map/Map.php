@@ -15,7 +15,7 @@ abstract class Map extends FTraversable{
      */
     private static final function construct(array $args){
         if(sizeof($args) === 0){
-            return Nil::Nil();
+            return EmptyMap::EmptyMap();
         } else {
             return self::construct(array_slice($args, 1))->cons($args[0]);
         }
@@ -33,12 +33,41 @@ abstract class Map extends FTraversable{
         return EmptyMap::EmptyMap();
     }
     
+    /**
+     * 
+     * @param type $item
+     * @return \KVMapCons
+     */
     protected function add($item){
-        return new KVMapCons($item, $this);
+        return new KVMap($item, $this);
+    }
+    
+    private function compareTo($_key1, $_key2){
+        if($_key1 == $_key2) {
+            return 0;
+        } elseif($_key1 < $_key2){
+            return -1;
+        } else {
+            return 1;
+        }
     }
     
     public function cons($item) {
-        
+        if($this->isEmpty()){
+            return $this->add($item);
+        } else {
+            $head_ = $this->head();
+            switch ($this->compareTo($item[0], $head_[0])){
+                case 1: return $this->tail()->cons($item)->add($head_);
+                case 2: 
+                    if($item[1] === $head_[1]){
+                        return $this;
+                    } else {
+                        return $this->tail()->cons($item);
+                    }
+                default : return $this->tail()->add($head_)->add($item);
+            }
+        }
     }
     
     private function helper(Map $acc, Map $other){
@@ -165,9 +194,9 @@ class EmptyMap extends Map{
 class MapFrmToString implements Fn2{
     public function apply($acc, $item) {
         if($acc === ""){
-            return $item;
+            return "($item[0] -> $item[1])";
         } else {
-            return "$acc, $item";
+            return "$acc, ($item[0] -> $item[1])";
         }
     }
 }
