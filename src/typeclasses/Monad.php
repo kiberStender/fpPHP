@@ -22,7 +22,7 @@ abstract class Monad implements Functor{
      * Haskell >> function
      * @param Fn1 $f
      */
-    public function fpForeach(Fn1 $f){
+    public function fpForeach($f){
         $this->map($f);
     }
 }
