@@ -3,9 +3,6 @@
  *
  * @author sirkleber
  */
-set_include_path(dirname(__FILE__) . "/../");
-
-require_once 'fn/Fn1.php';
 
 interface Functor {
     /**
@@ -13,5 +10,5 @@ interface Functor {
      * f a -> (a -> b) -> f b
      * @param Fn1 $f
      */
-    public function map(Fn1 $f);
+    public function map($f);
 }

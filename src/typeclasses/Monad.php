@@ -5,6 +5,7 @@
  *
  * @author sirkleber
  */
+set_include_path(dirname(__FILE__) . "/../");
 
 require_once 'Functor.php';
 
@@ -15,7 +16,7 @@ abstract class Monad implements Functor{
      * flatMap:: m a -> (a -> m b) -> m b
      * @param Fn1 $f
      */
-    public abstract function flatMap(Fn1 $f);
+    public abstract function flatMap($f);
     
     /**
      * Haskell >> function

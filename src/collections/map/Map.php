@@ -86,8 +86,12 @@ abstract class Map extends FTraversable{
         return "Map";
     }
     
-    protected function toStringFrmt() {
-        return new MapFrmToString();
+    protected function toStringFrmt($acc, $item) {
+        if($acc === ""){
+            return "($item[0] -> $item[1])";
+        } else {
+            return "$acc, ($item[0] -> $item[1])";
+        }
     }
     
     private function splitR($n, Map $curL, Map $pre){
@@ -198,14 +202,3 @@ class EmptyMap extends Map{
         return Nothing::Nothing();
     }
 }
-
-class MapFrmToString implements Fn2{
-    public function apply($acc, $item) {
-        if($acc === ""){
-            return "($item[0] -> $item[1])";
-        } else {
-            return "$acc, ($item[0] -> $item[1])";
-        }
-    }
-}
-

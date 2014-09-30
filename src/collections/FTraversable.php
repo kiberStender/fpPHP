@@ -6,7 +6,6 @@
  * @author sirkleber
  */
 
-require_once 'fn/Fn2.php';
 require_once 'maybe/Maybe.php';
 
 abstract class FTraversable extends Monad{
@@ -66,35 +65,43 @@ abstract class FTraversable extends Monad{
     public abstract function concat(FTraversable $prefix);
     
     public final function __toString(){
-        return "{$this->prefix()}({$this->foldLeft("", new ToStringFrm($this->toStringFrmt()))})";
+        return "{$this->prefix()}({$this->foldLeft("", function($acc, $item){return $this->toStringFrmt($acc, $item);})})";
     }
 
     protected abstract function prefix();
 
-    protected abstract function toStringFrmt();
+    protected abstract function toStringFrmt($acc, $item);
 
     
     public function length(){
-        return $this->foldLeft(0, new LengthFoldLeft());
+        return $this->foldLeft(0, function($acc, $item){return $acc + 1;});
     }
 
-    public function filter(Fn1 $p){
-        return $this->foldRight($this->empty_(), new FilterFoldRight($p));
+    public function filter($p){
+        return $this->foldRight($this->empty_(), function($item, $acc) use($p){
+            if($p($item)){
+                return $acc->cons($item);
+            } else {
+                return $acc;
+            }
+        });
     }
 
-    public function filterNot(Fn1 $p){
-        return $this->filter(new FilterNot($p));
+    public function filterNot($p){
+        return $this->filter(function($x) use($p){
+            return !$p($x);
+        });
     }
 
-    public final function partition(Fn1 $p){
+    public final function partition($p){
         return array($this->filter($p), $this->filterNot($p));
     }
 
-    public function find(Fn1 $p){
+    public function find($p){
         if($this->isEmpty()){
             return Nothing::Nothing();
         } else {
-            if($p->apply($this->head())){
+            if($p($this->head())){
                 return new Just($this->head());
             } else {
                 return $this->tail()->find($p);
@@ -104,86 +111,35 @@ abstract class FTraversable extends Monad{
 
     public abstract function splitAt($n);
     
-    public function foldLeft($acc, Fn2 $f){
+    public function foldLeft($acc, $f){
         if($this->isEmpty()){
             return $acc;
         } else {
-            return $this->tail()->foldLeft($f->apply($acc, $this->head()), $f);
+            return $this->tail()->foldLeft($f($acc, $this->head()), $f);
         }
     }
 
-    public function foldRight($acc, Fn2 $f){
-        if(isEmpty()){
-            return acc;
-        } else {
-            return $f->apply($this->head(), $this->tail()->foldRight($acc, $f));
-        }
-    }
-    
-    public function map(Fn1 $f) {
+    public function foldRight($acc, $f){
         if($this->isEmpty()){
-            return $this->empty_();
-        } else {
-            return $this->tail()->map($f)->cons($f->apply($this->head()));
-        }
-    }
-    
-    public function flatMap(Fn1 $f) {
-        if($this->isEmpty()){
-            return $this->empty_();
-        } else {
-            return $this->tail()->flatMap($f)->concat($f->apply($this->head()));
-        }
-    }
-}
-
-class ToStringFrm implements Fn2{
-    private $frmt;
-    
-    function __construct(Fn2 $frmt) {
-        $this->frmt = $frmt;
-    }
-    
-    public function apply($acc, $item) {
-        return $this->frmt->apply($acc, $item);
-    }
-}
-
-class SumFoldLeft implements Fn2{
-    public function apply($acc, $item) {
-        return $acc + $item;
-    }
-}
-
-class LengthFoldLeft implements Fn2{
-    public function apply($a, $b) {
-        return $a + 1;
-    }
-}
-
-class FilterFoldRight implements Fn2{
-    private $p;
-    
-    public function __construct(Fn1 $p) {
-        $this->p = $p;
-    }
-
-    public function apply($item, $acc) {
-        if($this->p->apply($item)){
-            return $acc->cons($item);
-        } else {
             return $acc;
+        } else {
+            return $f($this->head(), $this->tail()->foldRight($acc, $f));
         }
     }
-}
-
-class FilterNot implements Fn1{
-    private $p;
     
-    public function __construct(Fn1 $p) {
-        $this->p = $p;
+    public function map($f) {
+        if($this->isEmpty()){
+            return $this->empty_();
+        } else {
+            return $this->tail()->map($f)->cons($f($this->head()));
+        }
     }
-    public function apply($item) {
-        return !$this->p->apply($item);
+    
+    public function flatMap($f) {
+        if($this->isEmpty()){
+            return $this->empty_();
+        } else {
+            return $this->tail()->flatMap($f)->concat($f($this->head()));
+        }
     }
 }

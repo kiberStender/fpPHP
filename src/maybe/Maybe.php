@@ -5,23 +5,22 @@
  *
  * @author sirkleber
  */
-require_once "fn/Fn.php";
 require_once 'typeclasses/Monad.php';
 
 abstract class Maybe extends Monad{
-    public function map(Fn1 $f) {
+    public function map($f) {
         if($this instanceof Nothing){
             return $this;
         } else {
-            return new Just($f->apply($this->get()));
+            return new Just($f($this->get()));
         }
     }
     
-    public function flatMap(Fn1 $f) {
+    public function flatMap($f) {
         if($this instanceof Nothing){
             return $this;
         } else {
-            return $f->apply($this->get());
+            return $f($this->get());
         }
     }
     

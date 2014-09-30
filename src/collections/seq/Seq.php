@@ -54,8 +54,12 @@ abstract class Seq extends FTraversable{
         return "Seq";
     }
     
-    protected function toStringFrmt() {
-        return new SeqFrmToString();
+    protected function toStringFrmt($acc, $item) {
+        if($acc === ""){
+            return $item;
+        } else {
+            return "$acc, $item";
+        }
     }
     
     /**
@@ -160,21 +164,5 @@ class Nil extends Seq{
     
     public function maybeLast() {
         return Nothing::Nothing();
-    }
-}
-
-class SeqFrmToString implements Fn2{
-    public function apply($acc, $item) {
-        if($acc === ""){
-            return $item;
-        } else {
-            return "$acc, $item";
-        }
-    }
-}
-
-class SeqReverse implements Fn2{
-    public function apply($acc, $item) {
-        return $acc->cons($item);
     }
 }
