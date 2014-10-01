@@ -4,19 +4,20 @@
  *
  * @author sirkleber
  */
-require_once "fn/Fn.php";
+namespace ftry;
+
 require_once 'typeclasses/Monad.php';
 
 abstract class FTry extends Monad {
-    public static final function build(Fn $f){
+    public static final function build($f){
         try {
-            return new Success($f->apply());
+            return new Success($f());
         } catch (Exception $ex) {
             return new Failure($ex);
         }
     }
     
-    public abstract function getOrElse(Fn $f);
+    public abstract function getOrElse($f);
 
     public abstract function isSuccess();
 
@@ -31,18 +32,20 @@ class Success extends FTry {
     }
     
     public function map(Fn1 $f) {
-        return FTry::build(new MapFn($f->apply($this->value)));
+        return FTry::build(function() use($f){
+            return $f($this->value);
+        });
     }
     
-    public function flatMap(Fn1 $f) {
+    public function flatMap($f) {
         try {
-            return $f->apply($this->value);
+            return $f($this->value);
         } catch (Exception $ex) {
             return new Failure($ex);
         }
     }
     
-    public function getOrElse(Fn $f) {
+    public function getOrElse($f) {
         return $this->value;
     }
 
@@ -66,15 +69,15 @@ class Failure extends FTry {
         $this->value = $value;
     }
     
-    public function map(Fn1 $f) {
+    public function map($f) {
         return $this;
     }
     
-    public function flatMap(Fn1 $f) {
+    public function flatMap($f) {
         return $this;
     }
     
-    public function getOrElse(Fn $f) {
+    public function getOrElse($f) {
         return $f->apply();
     }
 
@@ -88,16 +91,5 @@ class Failure extends FTry {
     
     public function __toString() {
         return "Failure($this->value)";
-    }
-}
-
-class MapFn implements Fn{
-    private $val;
-    function __construct($val) {
-        $this->val = $val;
-    }
-
-    public function apply() {
-        return $this->val;
     }
 }
