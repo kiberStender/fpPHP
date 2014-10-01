@@ -5,9 +5,12 @@
  *
  * @author sirkleber
  */
-set_include_path(dirname(__FILE__) . "/../");
+namespace typeclasses;
 
+set_include_path(dirname(__FILE__) . "/../");
 require_once 'Functor.php';
+
+use typeclasses\Functor;
 
 abstract class Monad implements Functor{
     

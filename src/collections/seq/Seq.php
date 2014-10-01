@@ -5,7 +5,11 @@
  *
  * @author sirkleber
  */
+namespace collections\seq;
+
 require_once 'collections/FTraversable.php';
+
+use collections\FTraversable;
 
 abstract class Seq extends FTraversable{
     

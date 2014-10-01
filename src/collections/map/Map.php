@@ -5,7 +5,11 @@
  *
  * @author sirkleber
  */
+namespace collections\map;
+
 require_once 'collections/FTraversable.php';
+
+use collections\FTraversable;
 
 abstract class Map extends FTraversable{
     /**

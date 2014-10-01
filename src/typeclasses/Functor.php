@@ -4,6 +4,8 @@
  * @author sirkleber
  */
 
+namespace typeclasses;
+
 interface Functor {
     /**
      * Function to traverse the container and apply a function to transform it

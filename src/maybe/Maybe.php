@@ -5,7 +5,11 @@
  *
  * @author sirkleber
  */
+namespace maybe;
+
 require_once 'typeclasses/Monad.php';
+
+use typeclasses\Monad;
 
 abstract class Maybe extends Monad{
     public function map($f) {

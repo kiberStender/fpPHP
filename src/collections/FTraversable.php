@@ -5,8 +5,12 @@
  *
  * @author sirkleber
  */
+namespace collections;
 
 require_once 'maybe/Maybe.php';
+
+use typeclasses\Monad;
+use maybe\Just;
 
 abstract class FTraversable extends Monad{
     /**
