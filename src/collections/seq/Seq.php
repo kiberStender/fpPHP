@@ -135,6 +135,10 @@ class Cons extends Seq{
 class Nil extends Seq{
     private static $nil = null;
     
+    /**
+     * 
+     * @return Seq
+     */
     public static function Nil(){
         if(!isset(self::$nil)){
             self::$nil = new Nil();
