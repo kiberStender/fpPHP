@@ -30,10 +30,10 @@ class SQL implements Functor{
         return new SQL($pdo, $query);
     }
     
-    private function __construct(PDO $pdo, $query, PDOStatement $st = null) {
+    private function __construct(PDO $pdo, $query) {
         $this->pdo = $pdo;
         $this->query = $query;
-        $this->st = $st;
+        $this->st = $pdo->prepare($query);
     }
     
     /**
@@ -56,10 +56,9 @@ class SQL implements Functor{
      * @return Seq
      */
     public function as_($f){
-      $st = $this->pdo->prepare($this->query);
       $arr = Nil::Nil();
       
-      foreach ($st as $value){
+      foreach ($this->st as $value){
         $arr = $arr->cons($f($value));
       }
       
