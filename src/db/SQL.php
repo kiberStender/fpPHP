@@ -30,10 +30,16 @@ class SQL implements Functor{
         return new SQL($pdo, $query);
     }
     
-    private function __construct(PDO $pdo, $query) {
+    private function __construct(PDO $pdo, $query, \PDOStatement $st = null) {
         $this->pdo = $pdo;
         $this->query = $query;
-        $this->st = $pdo->prepare($query);
+        $this->st = call_user_func(function()use($query, $pdo, $st){
+          if(isset($st)){
+            return $st;
+          } else {
+            return $pdo->prepare($query);
+          }
+        });
     }
     
     /**
