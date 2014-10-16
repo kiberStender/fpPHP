@@ -102,14 +102,12 @@ abstract class Map extends FTraversable{
         }
       } else {
         $tp = $this->splitAt(round($n / 2));
-        $x = $tp[0];
-        $y = $tp[1];
-        $yh = $y->head();
+        $yh = $tp[1]->head();
         
         if($this->compareTo($yh[0], $key) > 0){
-          return $x->get($key);
+          return $tp[0]->get($key);
         } else {
-          return $y->get($key);
+          return $tp[1]->get($key);
         }
       }
     }
