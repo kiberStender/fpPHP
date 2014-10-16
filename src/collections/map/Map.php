@@ -10,6 +10,8 @@ namespace collections\map;
 require_once 'collections/FTraversable.php';
 
 use collections\FTraversable;
+use maybe\Just;
+use maybe\Nothing;
 
 abstract class Map extends FTraversable{
     /**
@@ -84,6 +86,32 @@ abstract class Map extends FTraversable{
     
     public function concat(FTraversable $prefix) {
         return $this->helper($this, $prefix);
+    }
+    
+    public function get($key){
+      $n = $this->length();
+      
+      if($n === 0){
+        return Nothing::Nothing();
+      } else if($n === 1){
+        $x = $this->head();
+        if($x[0] === $key){
+          return new Just($x[1]);
+        } else {
+          return Nothing::Nothing();
+        }
+      } else {
+        $tp = $this->splitAt(round($n / 2));
+        $x = $tp[0];
+        $y = $tp[1];
+        $yh = $y->head();
+        
+        if($this->compareTo($yh[0], $key) > 0){
+          return $x->get($key);
+        } else {
+          return $y->get($key);
+        }
+      }
     }
     
     protected function prefix() {
