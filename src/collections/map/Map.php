@@ -82,6 +82,30 @@ abstract class Map extends FTraversable{
         return $this->helper($this, $prefix);
     }
     
+    public function get($key){
+      $n = $this->length();
+      
+      if($n === 0){
+        return Nothing::Nothing();
+      } else if($n === 1){
+        $x = $this->head();
+        if($x[0] === $key){
+          return new Just($x[1]);
+        } else {
+          return Nothing::Nothing();
+        }
+      } else {
+        $tp = $this->splitAt(round($n / 2));
+        $yh = $tp[1]->head();
+        
+        if($this->compareTo($yh[0], $key) > 0){
+          return $tp[0]->get($key);
+        } else {
+          return $tp[1]->get($key);
+        }
+      }
+    }
+    
     protected function prefix() {
         return "Map";
     }
