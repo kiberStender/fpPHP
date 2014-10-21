@@ -5,9 +5,12 @@
  *
  * @author sirkleber
  */
+require_once 'maybe/Maybe.php';
+
 abstract class Result {
   protected $value;
   protected $type;
+  protected $f;
   
   public abstract function isFailure();
   
@@ -19,7 +22,18 @@ abstract class Result {
     return $this->type;
   }
   
+  /**
+   * @param string $type
+   * @return Result
+   */
   public abstract function as_($type);
+  
+  /**
+   * 
+   * @param Fn1 $f
+   * @return Result
+   */
+  public abstract function withParser(Fn1 $f);
 }
 
 class ResFailure extends Result{
@@ -28,14 +42,25 @@ class ResFailure extends Result{
     return new ResFailure($value);
   }
   
-  private function __construct($value, $type = "json") {
+  private function __construct($value, $type = "json", Maybe $f = null) {
     $this->value = $value;
     $this->type = $type;
+    
+    if(isset($f)){
+      $this->f = $f;
+    } else {
+      $this->f = Nothing::Nothing();
+    }
   }
   
   public function as_($type) {
-    return new ResFailure($this->value, $type);
+    return new ResFailure($this->value, $type, $this->f);
   }
+  
+  public function withParser(Fn1 $f) {
+    return new ResFailure($this->value, $this->type, new Just($f));
+  }
+
   
   public function isFailure() {
     return true;
@@ -49,13 +74,22 @@ class ResSuccess extends Result{
   }
   
   public function as_($type) {
-    return new ResSuccess($this->value, $type);
+    return new ResSuccess($this->value, $type, $this->f);
   }
-
   
-  private function __construct($value, $type = "json") {
+  public function withParser(Fn1 $f) {
+    return new ResSuccess($this->value, $this->type, new Just($f));
+  }
+  
+  private function __construct($value, $type = "json", Maybe $f = null) {
     $this->value = $value;
     $this->type = $type;
+    
+    if(isset($f)){
+      $this->f = $f;
+    } else {
+      $this->f = Nothing::Nothing();
+    }
   }  
   
   public function isFailure() {
