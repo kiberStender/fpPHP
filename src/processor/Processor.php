@@ -6,6 +6,8 @@
  * @author sirkleber
  */
 
+set_include_path(dirname(__FILE__) . "/../");
+
 require_once 'collections/map/Map.php';
 require_once 'collections/seq/Seq.php';
 require_once 'processor/Parseable.php';
@@ -27,7 +29,7 @@ class Processor {
     return $m;
   }
   
-  public static final function Processor(Fn1 $f){
+  public static final function build(Fn1 $f){
     $res = $f->apply(self::arrayToMap($_POST));
     $prim = Seq::build("string", "array", "integer", "boolean", "float");
     
