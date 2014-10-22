@@ -10,8 +10,9 @@ abstract class Parseable {
   protected $parser;
   protected $contentType;
   
-  function __construct($prim, Maybe $parser) {
+  function __construct($prim, $contentType, Maybe $parser) {
     $this->value = $prim;
+    $this->contentType = $contentType;
     $this->parser = $parser;
   }
   
