@@ -34,6 +34,10 @@ abstract class Result {
    * @return Result
    */
   public abstract function withParser(Fn1 $f);
+  
+  public function getParser(){
+    return $this->f;
+  }
 }
 
 class ResFailure extends Result{
