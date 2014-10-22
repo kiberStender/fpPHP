@@ -16,6 +16,17 @@ abstract class FTraversable extends Monad{
     public abstract function isEmpty();
     
     /**
+     * @return A The subtype of the Traversable
+     */
+    public function subType() {
+      if(is_object($this->head())){
+        return get_class($this->head());
+      } else {
+        return gettype($this->head());
+      }
+    }
+    
+    /**
      * @return A The item itself
      */
     public abstract function head();
@@ -54,14 +65,14 @@ abstract class FTraversable extends Monad{
     /**
      * Scala :: and Haskell : functions
      * @param item the item to be appended to the collection
-     * @return a new collection
+     * @return FTraversable A new collection
      */
     public abstract function cons($item);
 
     /**
      * Scala and Haskell ++ function
      * @param prefix new collection to be concat in the end of this collection
-     * @return a new collection
+     * @return FTraversable A new collection
      */
     public abstract function concat(FTraversable $prefix);
     
@@ -90,6 +101,11 @@ abstract class FTraversable extends Monad{
         return array($this->filter($p), $this->filterNot($p));
     }
 
+    /**
+     * 
+     * @param Fn1 $p
+     * @return Maybe
+     */
     public function find(Fn1 $p){
         if($this->isEmpty()){
             return Nothing::Nothing();
@@ -100,6 +116,13 @@ abstract class FTraversable extends Monad{
                 return $this->tail()->find($p);
             }
         }
+    }
+    
+    /**
+     * @return Boolean
+     */
+    public function constains($item){
+      return $this->find(new FindContains($item)) instanceof Just;
     }
 
     public abstract function splitAt($n);
@@ -186,4 +209,16 @@ class FilterNot implements Fn1{
     public function apply($item) {
         return !$this->p->apply($item);
     }
+}
+
+class FindContains implements Fn1{
+  private $item;
+  
+  function __construct($item) {
+    $this->item = $item;
+  }
+  
+  public function apply($a) {
+    return $this->item == $a;
+  }
 }
