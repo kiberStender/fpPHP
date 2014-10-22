@@ -5,6 +5,11 @@
  *
  * @author sirkleber
  */
+
+set_include_path(dirname(__FILE__) . "/../");
+
+require_once 'maybe/Maybe.php';
+
 abstract class Parseable {
   protected $value;
   protected $parser;

@@ -5,6 +5,8 @@
  *
  * @author sirkleber
  */
+set_include_path(dirname(__FILE__) . "/../");
+
 require_once "fn/Fn.php";
 require_once 'typeclasses/Monad.php';
 

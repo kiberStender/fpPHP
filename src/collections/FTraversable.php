@@ -6,6 +6,8 @@
  * @author sirkleber
  */
 
+set_include_path(dirname(__FILE__) . "/../");
+
 require_once 'fn/Fn2.php';
 require_once 'maybe/Maybe.php';
 
