@@ -5,6 +5,9 @@
  *
  * @author sirkleber
  */
+
+set_include_path(dirname(__FILE__) . "/../");
+
 require_once 'maybe/Maybe.php';
 
 abstract class Result {
@@ -42,7 +45,7 @@ abstract class Result {
 
 class ResFailure extends Result{
   
-  public static function ResFailure($value){
+  public static function build($value){
     return new ResFailure($value);
   }
   
@@ -73,7 +76,7 @@ class ResFailure extends Result{
 
 class ResSuccess extends Result{
   
-  public static function ResSuccess($value){
+  public static function build($value){
     return new ResSuccess($value);
   }
   
