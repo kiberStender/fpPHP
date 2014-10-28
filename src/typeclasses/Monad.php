@@ -8,7 +8,8 @@
 namespace typeclasses;
 
 set_include_path(dirname(__FILE__) . "/../");
-require_once 'Functor.php';
+
+require_once 'typeclasses/Functor.php';
 
 use typeclasses\Functor;
 

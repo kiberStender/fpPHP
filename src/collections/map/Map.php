@@ -7,6 +7,8 @@
  */
 namespace collections\map;
 
+set_include_path(dirname(__FILE__) . "/../");
+
 require_once 'collections/FTraversable.php';
 
 use collections\FTraversable;
