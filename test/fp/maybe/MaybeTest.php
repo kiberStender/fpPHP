@@ -6,8 +6,16 @@
  */
 
 class MaybeTest extends PHPUnit_Framework_TestCase{
+  
+  private $j;
+  
+  public function __construct(){
+    parent::__construct();
+    $this->j = new Just(1);
+  }
+  
   public function testEquals() {
-    $this->assertEquals(new Just(1), new Just(1));
+    $this->assertEquals($this->j, $this->j);
   }
   
   public function testEquals1(){
@@ -15,22 +23,30 @@ class MaybeTest extends PHPUnit_Framework_TestCase{
   }
   
   public function testEquals2(){
-    $this->assertFalse(new Just(1) == Nothing::Nothing());
+    $this->assertFalse($this->j == Nothing::Nothing());
   }
   
   public function testMap(){
-    $j = new Just(1);
-    $this->assertEquals($j->map(new JustAddMap()), new Just(2));
+    $this->assertEquals($this->j->map(new JustAddMap()), new Just(2));
   }
   
   public function testMap1(){
-    $j = new Just(1);
-    $this->assertEquals($j->map(new JustMultMap()), new Just(2));
+    $this->assertEquals($this->j->map(new JustMultMap()), new Just(2));
   }
   
   public function testFlatMap(){
-    $j = new Just(1);
-    $this->assertEquals($j->flatMap(new JustAddFlatMap()), new Just(2));
+    $this->assertEquals($this->j->flatMap(new JustAddFlatMap()), new Just(2));
+  }
+  
+  public function testGet(){
+    $this->assertEquals($this->j->get(), 1);
+  }
+  
+  /**
+   * @expectedException Exception
+   */
+  public function testGet1(){
+    Nothing::Nothing()->get();
   }
 }
 
