@@ -48,6 +48,14 @@ class MaybeTest extends PHPUnit_Framework_TestCase{
   public function testGet1(){
     Nothing::Nothing()->get();
   }
+  
+  public function testGetOrElse(){
+    $this->assertEquals($this->j->getOrElse(new GetOrElseJust()), 1);
+  }
+  
+  public function testGetOrElse1(){
+    $this->assertEquals(Nothing::Nothing()->getOrElse(new GetOrElseJust()), "Nothing");
+  }
 }
 
 class JustAddMap implements Fn1{
@@ -65,5 +73,11 @@ class JustMultMap implements Fn1{
 class JustAddFlatMap implements Fn1{
   public function apply($a) {
     return new Just($a + 1);
+  }
+}
+
+class GetOrElseJust implements Fn{
+  public function apply() {
+    return "Nothing";
   }
 }
