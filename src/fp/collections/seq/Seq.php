@@ -5,11 +5,7 @@
  *
  * @author sirkleber
  */
-namespace collections\seq;
-
 require_once 'collections/FTraversable.php';
-
-use collections\FTraversable;
 
 abstract class Seq extends FTraversable{
     
@@ -58,12 +54,8 @@ abstract class Seq extends FTraversable{
         return "Seq";
     }
     
-    protected function toStringFrmt($acc, $item) {
-        if($acc === ""){
-            return $item;
-        } else {
-            return "$acc, $item";
-        }
+    protected function toStringFrmt() {
+        return new SeqFrmToString();
     }
     
     /**
@@ -71,9 +63,7 @@ abstract class Seq extends FTraversable{
      * @return Seq
      */
     public function reverse(){
-        return $this->foldLeft($this->empty_(), function($acc, $item){
-            return $acc->cons($item);
-        });
+        return $this->foldLeft($this->empty_(), new SeqReverse());
     }
     
     private function splitR($n, Seq $curL, Seq $pre){
@@ -174,5 +164,21 @@ class Nil extends Seq{
     
     public function maybeLast() {
         return Nothing::Nothing();
+    }
+}
+
+class SeqFrmToString implements Fn2{
+    public function apply($acc, $item) {
+        if($acc === ""){
+            return $item;
+        } else {
+            return "$acc, $item";
+        }
+    }
+}
+
+class SeqReverse implements Fn2{
+    public function apply($acc, $item) {
+        return $acc->cons($item);
     }
 }

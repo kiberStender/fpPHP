@@ -5,15 +5,9 @@
  *
  * @author sirkleber
  */
-namespace db;
-
 set_include_path(dirname(__FILE__) . "/../");
 
 include_once 'collections/Seq.php';
-include_once 'collections/Map.php';
-
-use collections\seq\Nil;
-use collections\map\Map;
 
 class SQL implements Functor{
     private $query;
@@ -30,16 +24,10 @@ class SQL implements Functor{
         return new SQL($pdo, $query);
     }
     
-    private function __construct(PDO $pdo, $query, \PDOStatement $st = null) {
+    private function __construct(PDO $pdo, $query, PDOStatement $st = null) {
         $this->pdo = $pdo;
         $this->query = $query;
-        $this->st = call_user_func(function()use($query, $pdo, $st){
-          if(isset($st)){
-            return $st;
-          } else {
-            return $pdo->prepare($query);
-          }
-        });
+        $this->st = $st;
     }
     
     /**
@@ -48,24 +36,23 @@ class SQL implements Functor{
      * @return SQL
      */
     public function on(Map $m){
-      $m->fpForeach(function($m){
-        $this->st->bindValue(":$m[0]", $m[1]);
-        return $m;
-      });
-      return new SQL($this->pdo, $this->query, $this->st);
+      $call = new OnFpForeach($this->pdo->prepare($this->query));
+      $m->fpForeach($call);
+      return new SQL($this->pdo, $this->query, $call->getSt());
     }
     
     /**
      * Function for mapping the object Array that cames from select statement
      * into a Seq of A's
-     * @param $f
+     * @param Fn1 $f
      * @return Seq
      */
-    public function as_($f){
+    public function as_(Fn1 $f){
+      $st = $this->pdo->prepare($this->query);
       $arr = Nil::Nil();
       
-      foreach ($this->st as $value){
-        $arr = $arr->cons($f($value));
+      foreach ($st as $value){
+        $arr = $arr->cons($f->apply($value));
       }
       
       return $arr;
@@ -75,12 +62,33 @@ class SQL implements Functor{
       return $this->st->execute();
     }
     
-    public function map($f) {
+    public function map(Fn1 $f) {
       $arr = Nil::Nil();
       
       foreach ($this->st as $value){
-        $arr = $arr->cons($f($value));
+        $arr = $arr->cons($f->apply($value));
       }      
       return $arr;
     }
+}
+
+class OnFpForeach implements Fn1{
+  private $st;
+  
+  function __construct(PDOStatement $st) {
+    $this->st = $st;
+  }
+  
+  /**
+   * 
+   * @return PDOStatement
+   */
+  function getSt() {
+    return $this->st;
+  }
+  
+  public function apply($m) {
+    $this->st->bindValue(":$m[0]", $m[1]);
+    return $m;
+  }
 }

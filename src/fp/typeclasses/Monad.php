@@ -5,13 +5,10 @@
  *
  * @author sirkleber
  */
-namespace typeclasses;
 
-set_include_path(dirname(__FILE__) . "/../");
+set_include_path(dirname(__FILE__) . "/../../");
 
-require_once 'typeclasses/Functor.php';
-
-use typeclasses\Functor;
+require_once 'fp/typeclasses/Functor.php';
 
 abstract class Monad implements Functor{
     
@@ -20,13 +17,13 @@ abstract class Monad implements Functor{
      * flatMap:: m a -> (a -> m b) -> m b
      * @param Fn1 $f
      */
-    public abstract function flatMap($f);
+    public abstract function flatMap(Fn1 $f);
     
     /**
      * Haskell >> function
      * @param Fn1 $f
      */
-    public function fpForeach($f){
+    public function fpForeach(Fn1 $f){
         $this->map($f);
     }
 }

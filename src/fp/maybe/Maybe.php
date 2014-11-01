@@ -5,26 +5,25 @@
  *
  * @author sirkleber
  */
-namespace maybe;
+set_include_path(dirname(__FILE__) . "/../");
 
+require_once "fn/Fn.php";
 require_once 'typeclasses/Monad.php';
 
-use typeclasses\Monad;
-
 abstract class Maybe extends Monad{
-    public function map($f) {
+    public function map(Fn1 $f) {
         if($this instanceof Nothing){
             return $this;
         } else {
-            return new Just($f($this->get()));
+            return new Just($f->apply($this->get()));
         }
     }
     
-    public function flatMap($f) {
+    public function flatMap(Fn1 $f) {
         if($this instanceof Nothing){
             return $this;
         } else {
-            return $f($this->get());
+            return $f->apply($this->get());
         }
     }
     

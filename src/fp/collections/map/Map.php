@@ -5,15 +5,7 @@
  *
  * @author sirkleber
  */
-namespace collections\map;
-
-set_include_path(dirname(__FILE__) . "/../");
-
 require_once 'collections/FTraversable.php';
-
-use collections\FTraversable;
-use maybe\Just;
-use maybe\Nothing;
 
 abstract class Map extends FTraversable{
     /**
@@ -118,12 +110,8 @@ abstract class Map extends FTraversable{
         return "Map";
     }
     
-    protected function toStringFrmt($acc, $item) {
-        if($acc === ""){
-            return "($item[0] -> $item[1])";
-        } else {
-            return "$acc, ($item[0] -> $item[1])";
-        }
+    protected function toStringFrmt() {
+        return new MapFrmToString();
     }
     
     private function splitR($n, Map $curL, Map $pre){
@@ -234,3 +222,14 @@ class EmptyMap extends Map{
         return Nothing::Nothing();
     }
 }
+
+class MapFrmToString implements Fn2{
+    public function apply($acc, $item) {
+        if($acc === ""){
+            return "($item[0] -> $item[1])";
+        } else {
+            return "$acc, ($item[0] -> $item[1])";
+        }
+    }
+}
+
