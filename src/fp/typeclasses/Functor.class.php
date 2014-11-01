@@ -3,9 +3,6 @@
  *
  * @author sirkleber
  */
-set_include_path(dirname(__FILE__) . "/../../");
-
-require_once 'fp/fn/Fn1.php';
 
 interface Functor {
     /**

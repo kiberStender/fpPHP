@@ -6,10 +6,6 @@
  * @author sirkleber
  */
 
-set_include_path(dirname(__FILE__) . "/../../");
-
-require_once 'fp/typeclasses/Functor.php';
-
 abstract class Monad implements Functor{
     
     /**
