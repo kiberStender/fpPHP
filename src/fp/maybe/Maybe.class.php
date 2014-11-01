@@ -26,4 +26,6 @@ abstract class Maybe extends Monad{
   public abstract function getOrElse(Fn $f);
   
   public abstract function get();
+  
+  public abstract function __toString();
 }
