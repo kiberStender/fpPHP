@@ -21,6 +21,34 @@ class SeqTest extends PHPUnit_Framework_TestCase{
   public function testEquals(){
     $this->assertEquals($this->seqi, $this->seqi);
   }
+  
+  public function testEquals1(){
+    $this->assertEquals($this->s, $this->s);
+  }
+  
+  public function testEquals2(){
+    $this->assertEquals($this->seqi, $this->s);
+  }
+  
+  public function testEquals3(){
+    $this->assertFalse($this->seqi != $this->s);
+  }
+  
+  public function testToString(){
+    $this->assertEquals("Seq(1, 2, 3)", $this->seqi);
+  }
+  
+  public function testToString1(){
+    $this->assertEquals("Seq(Joao, Luiz)", $this->seqs);
+  }
+  
+  public function testLength(){
+    $this->assertEquals(3, $this->seqi->length());
+  }
+  
+  public function testLength4(){
+    $this->assertEquals(2, $this->seqs->length());
+  }
 }
 
 class FilterAnon implements Fn1 {
