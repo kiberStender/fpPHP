@@ -61,10 +61,30 @@ class SeqTest extends PHPUnit_Framework_TestCase{
   public function testReverse(){
     $this->assertEquals(Seq::build(3, 2, 1), $this->seqi->reverse());
   }
+  
+  public function testFoldLeft(){
+    $this->assertEquals(-6, $this->seqi->foldLeft(0, new FLeft()));
+  }
+  
+  public function testFoldRight(){
+    $this->assertEquals(2, $this->seqi->foldRight(0, new FRight()));
+  }
 }
 
 class FilterAnon implements Fn1 {
   public function apply($x) {
     return $x == 2;
+  }
+}
+
+class FLeft implements Fn2{
+  public function apply($acc, $item) {
+    return $acc - $item;
+  }
+}
+
+class FRight implements Fn2 {
+  public function apply($item, $acc) {
+    return $item - $acc;
   }
 }
