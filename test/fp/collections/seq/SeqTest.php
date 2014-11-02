@@ -49,6 +49,18 @@ class SeqTest extends PHPUnit_Framework_TestCase{
   public function testLength4(){
     $this->assertEquals(2, $this->seqs->length());
   }
+  
+  public function testCons(){
+    $this->assertEquals(Seq::build(0, 1, 2, 3), $this->seqi->cons(0));
+  }
+  
+  public function testConcat(){
+    $this->assertEquals(Seq::build(1, 2, 3, 1, 2, 3), $this->seqi->concat($this->s));
+  }
+  
+  public function testReverse(){
+    $this->assertEquals(Seq::build(3, 2, 1), $this->seqi->reverse());
+  }
 }
 
 class FilterAnon implements Fn1 {
