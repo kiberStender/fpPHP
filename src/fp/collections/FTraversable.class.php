@@ -116,7 +116,7 @@ abstract class FTraversable extends Monad{
   /**
    * @return Boolean
    */
-  public function constains($item){
+  public function contains($item){
     return $this->find(new FindContains($item)) instanceof Just;
   }
   
