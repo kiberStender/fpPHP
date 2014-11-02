@@ -93,6 +93,18 @@ class SeqTest extends PHPUnit_Framework_TestCase{
   public function testPartition(){
     $this->assertEquals(array(Seq::build(2), Seq::build(1, 3)), $this->seqi->partition($this->filter));
   }
+  
+  public function testFind(){
+    $this->assertEquals(new Just(2), $this->seqi->find($this->filter));
+  }
+  
+  public function testMap(){
+    $this->assertEquals(Seq::build(2, 4, 6), $this->seqi->map(new MapMult()));
+  }
+  
+  public function testFlatMap(){
+    $this->assertEquals(Seq::build(2, 4, 6), $this->seqi->flatMap(new FlatMapMult()));
+  }
 }
 
 class FilterAnon implements Fn1 {
@@ -101,7 +113,7 @@ class FilterAnon implements Fn1 {
   }
 }
 
-class FLeft implements Fn2{
+class FLeft implements Fn2 {
   public function apply($acc, $item) {
     return $acc - $item;
   }
@@ -110,5 +122,17 @@ class FLeft implements Fn2{
 class FRight implements Fn2 {
   public function apply($item, $acc) {
     return $item - $acc;
+  }
+}
+
+class MapMult implements Fn1 {
+  public function apply($x) {
+    return $x * 2;
+  }
+}
+
+class FlatMapMult implements Fn1 {
+  public function apply($x) {
+    return Seq::build($x * 2);
   }
 }
