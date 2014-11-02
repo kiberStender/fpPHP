@@ -5,7 +5,6 @@
  *
  * @author sirkleber
  */
-require_once 'collections/FTraversable.php';
 
 abstract class Map extends FTraversable{
   /**
