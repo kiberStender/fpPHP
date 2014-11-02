@@ -69,6 +69,30 @@ class SeqTest extends PHPUnit_Framework_TestCase{
   public function testFoldRight(){
     $this->assertEquals(2, $this->seqi->foldRight(0, new FRight()));
   }
+  
+  public function testInit(){
+    $this->assertEquals(Seq::build(1, 2), $this->seqi->init());
+  }
+  
+  public function testLast(){
+    $this->assertEquals(3, $this->seqi->last());
+  }
+  
+  public function testMaybeLast(){
+    $this->assertEquals(new Just(3), $this->s->maybeLast());
+  }
+  
+  public function testFilter(){
+    $this->assertEquals(Seq::build(2), $this->seqi->filter($this->filter));
+  }
+  
+  public function testFilterNot(){
+    $this->assertEquals(Seq::build(1, 3), $this->seqi->filterNot($this->filter));
+  }
+  
+  public function testPartition(){
+    $this->assertEquals(array(Seq::build(2), Seq::build(1, 3)), $this->seqi->partition($this->filter));
+  }
 }
 
 class FilterAnon implements Fn1 {
