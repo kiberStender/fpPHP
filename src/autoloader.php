@@ -17,9 +17,11 @@
       #collections.seq
       "Cons" => "collections/seq/Cons",
       "Nil" => "collections/seq/Nil",
-      "Seq" => "collections/seq/Seq"
+      "Seq" => "collections/seq/Seq",
       #collections.map
-      #collections.set
+      "EmptyMap" => "collections/map/EmptyMap",
+      "KVMap" => "collections/map/KVMap",
+      "Map" => "collections/map/Map"
     );
     
     if(isset($arr[$class])){
