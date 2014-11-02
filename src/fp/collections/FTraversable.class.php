@@ -133,7 +133,7 @@ abstract class FTraversable extends Monad{
     }
 
     public function foldRight($acc, Fn2 $f){
-        if(isEmpty()){
+        if($this->isEmpty()){
             return acc;
         } else {
             return $f->apply($this->head(), $this->tail()->foldRight($acc, $f));
