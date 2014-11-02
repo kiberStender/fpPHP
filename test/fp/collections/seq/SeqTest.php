@@ -105,6 +105,14 @@ class SeqTest extends PHPUnit_Framework_TestCase{
   public function testFlatMap(){
     $this->assertEquals(Seq::build(2, 4, 6), $this->seqi->flatMap(new FlatMapMult()));
   }
+  
+  public function testSplit(){
+    $this->assertEquals(array(Seq::build(1, 2), Seq::build(3)), $this->seqi->splitAt(2));
+  }
+  
+  public function testContains(){
+    $this->assertEquals(TRUE, $this->seqi->contains(2));
+  }
 }
 
 class FilterAnon implements Fn1 {
