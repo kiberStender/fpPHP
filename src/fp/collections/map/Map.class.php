@@ -81,27 +81,32 @@ abstract class Map extends FTraversable{
     return $this->helper($this, $prefix);
   }
   
+  /**
+   * 
+   * @param type $key
+   * @return \Maybe
+   */
   public function get($key){
     $n = $this->length();
     
-    if($n === 0){
-      return Nothing::Nothing();
-    } else if($n === 1){
-      $x = $this->head();
-      if($x[0] === $key){
-        return new Just($x[1]);
-      }else {
-        return Nothing::Nothing();
-      }
-    } else {
-      $tp = $this->splitAt(round($n / 2));
-      $yh = $tp[1]->head();
-      
-      if($this->compareTo($yh[0], $key) > 0){
-        return $tp[0]->get($key);
-      } else {
-        return $tp[1]->get($key);
-      }
+    switch($n){
+      case 0: return Nothing::Nothing();
+      case 1: 
+        $x = $this->head();
+        if($x[0] === $key){
+          return new Just($x[1]);
+        }else {
+          return Nothing::Nothing();
+        }
+      default:
+        $tp = $this->splitAt(round($n / 2));
+        $yh = $tp[1]->head();
+        
+        if($this->compareTo($yh[0], $key) > 0){
+          return $tp[0]->get($key);
+        } else {
+          return $tp[1]->get($key);
+        }
     }
   }
   
@@ -114,10 +119,11 @@ abstract class Map extends FTraversable{
   }
   
   private function splitR($n, Map $curL, Map $pre){
+    
     if($curL->isEmpty()){
       return array($pre, $this->empty_());
     } else {
-      if($n === 0){
+      if($n == 0){
         return array($pre, $curL);
       } else {
         return $this->splitR($n - 1, $curL->tail(), $pre->cons($curL->head()));

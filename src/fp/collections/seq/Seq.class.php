@@ -69,7 +69,7 @@ abstract class Seq extends FTraversable{
         if($curL->isEmpty()){
             return array($pre->reverse(), $this->empty_());
         } else {
-            if($n === 0){
+            if($n == 0){
                 return array($pre->reverse(), $curL);
             } else {
                 return $this->splitR($n - 1, $curL->tail(), $pre->cons($curL->head()));
