@@ -60,10 +60,74 @@ class MapTest extends PHPUnit_Framework_TestCase {
   public function testFind(){
     $this->assertEquals(new Just(array(2, "eduardo")), $this->mi->find(new FilterAnon()));
   }
+  
+  public function testGet(){
+    $this->assertEquals(new Just("eduardo"), $this->mi->get(2));
+  }
+  
+  public function testFoldLeft(){
+    $this->assertEquals(-3, $this->mi->foldLeft(0, new FLeft()));
+  }
+  
+  public function testFoldRight(){
+    $this->assertEquals(-1, $this->mi->foldRight(0, new FRight()));
+  }
+  
+  public function testMap(){
+    $this->assertEquals(Map::build(array(1, "kleberk"), array(2, "eduardok")), $this->mi->map(new MapV()));
+  }
+  
+  public function testMap1(){
+    $this->assertEquals(Map::build(array(2, "kleber"), array(4, "eduardo")), $this->mi->map(new MapK()));
+  }
+  
+  public function testFlatMap(){
+    $this->assertEquals(Map::build(array(1, "kleberk"), array(2, "eduardok")), $this->mi->flatMap(new FlatMapV()));
+  }
+  
+  public function testFlatMap1(){
+    $this->assertEquals(Map::build(array(2, "kleber"), array(4, "eduardo")), $this->mi->flatMap(new FlatMapK));
+  }
 }
 
 class FilterAnon implements Fn1 {
   public function apply($x) {
     return $x[0] == 2;
+  }
+}
+
+class FLeft implements Fn2 {
+  public function apply($acc, $item) {
+    return $acc - $item[0];
+  }
+}
+
+class FRight implements Fn2 {
+  public function apply($item, $acc) {
+    return $item[0] - $acc;
+  }
+}
+
+class MapK implements Fn1 {
+  public function apply($item) {
+    return array($item[0] * 2, $item[1]);
+  }
+}
+
+class MapV implements Fn1 {
+  public function apply($item) {
+    return array($item[0], "$item[1]k");
+  }
+}
+
+class FlatMapK implements Fn1 {
+  public function apply($item) {
+    return Map::build(array($item[0] * 2, $item[1]));
+  }
+}
+
+class FlatMapV implements Fn1 {
+  public function apply($item) {
+    return Map::build(array($item[0], "$item[1]k"));
   }
 }
