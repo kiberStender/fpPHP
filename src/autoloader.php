@@ -21,7 +21,10 @@
       #collections.map
       "EmptyMap" => "collections/map/EmptyMap",
       "KVMap" => "collections/map/KVMap",
-      "Map" => "collections/map/Map"
+      "Map" => "collections/map/Map",
+      #state
+      "State" => "state/State"
+      
     );
     
     if(isset($arr[$class])){
