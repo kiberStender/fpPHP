@@ -88,6 +88,20 @@ class MapTest extends PHPUnit_Framework_TestCase {
   public function testFlatMap1(){
     $this->assertEquals(Map::build(array(2, "kleber"), array(4, "eduardo")), $this->mi->flatMap(new FlatMapK));
   }
+  
+  public function testSplit(){
+    $this->assertEquals(array(Map::build(array(1, "kleber")), Map::build(array(2, "eduardo"))), $this->mi->splitAt(1));
+  }
+  
+  public function testSplit1(){
+    $m = array(Map::build(array(1, "kleber")), Map::build(array(2, "eduardo"), array(3, "scalise")));
+    $this->assertEquals($m, $this->mi->cons(array(3, "scalise"))->splitAt(1));
+  }
+  
+  public function testSplit2(){
+    $m = array(Map::build(array(1, "kleber"), array(2, "eduardo")), Map::build(array(3, "scalise")));
+    $this->assertEquals($m, $this->mi->cons(array(3, "scalise"))->splitAt(2));
+  }
 }
 
 class FilterAnon implements Fn1 {
