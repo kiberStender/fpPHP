@@ -16,6 +16,14 @@ class State extends Monad {
   function __construct(Fn1 $run) {
     $this->run = $run;
   }
+  
+  /**
+   * 
+   * @return Fn1
+   */
+  public function getRun(){
+    return $this->run;
+  }
 
   public function map(Fn1 $f) {
     return new State(new MapFn1($this->run, $f));
@@ -56,7 +64,7 @@ class MapFn1 implements Fn1 {
 
   public function apply($s) {
     $t = $this->run->apply($s);
-    return array($t[0], $this->f->apply($t[1]));
+    return array($t[1], $this->f->apply($t[0]));
   }
 
 }
@@ -73,7 +81,7 @@ class FlatMapFn1 implements Fn1 {
 
   public function apply($s) {
     $t = $this->run->apply($s);
-    return $this->f->apply($t[1])->run->apply($t[0]);
+    return $this->f->apply($t[1])->getRun()->apply($t[0]);
   }
 
 }
