@@ -6,6 +6,8 @@
  * @author sirkleber
  */
 
+namespace fp\maybe;
+
 class Nothing extends Maybe{
     
     private function __construct() {}
@@ -16,14 +18,14 @@ class Nothing extends Maybe{
      * 
      * @return Maybe
      */
-    public static final function Nothing(){
+    public static final function nothing(){
         if(!isset(self::$not)){
             self::$not = new Nothing();
         }
         return self::$not;
     }
     
-    public function getOrElse(Fn $f) {
+    public function getOrElse(callable $f) {
         return $f->apply();
     }
     
@@ -32,6 +34,6 @@ class Nothing extends Maybe{
     }
     
     public function __toString() {
-        return "";
+        return "Nothing";
     }
 }

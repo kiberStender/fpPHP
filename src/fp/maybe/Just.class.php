@@ -6,14 +6,21 @@
  * @author sirkleber
  */
 
-class Just extends Maybe{
+namespace fp\maybe;
+
+class Just extends Maybe {
+    private static $just_ = null;
     private $value;
     
-    public function __construct($value) {
+    private function __construct($value) {
         $this->value = $value;
     }
     
-    public function getOrElse(Fn $f) {
+    public static function just($value){
+        return new Just($value);
+    }
+
+    public function getOrElse(callable $f) {
         return $this->value;
     }
     

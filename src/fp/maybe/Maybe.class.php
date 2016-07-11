@@ -6,16 +6,20 @@
  * @author sirkleber
  */
 
+namespace fp\maybe;
+
+use fp\typeclasses\Monad;
+
 abstract class Maybe extends Monad{
-  public function map(Fn1 $f) {
+  public function map(callable $f) {
     if($this instanceof Nothing){
       return $this;
     } else {
-      return new Just($f->apply($this->get()));
+      return Just::just($f->apply($this->get()));
     }
   }
   
-  public function flatMap(Fn1 $f) {
+  public function flatMap(callable $f) {
     if($this instanceof Nothing){
       return $this;
       } else {
@@ -23,7 +27,7 @@ abstract class Maybe extends Monad{
       }
   }
   
-  public abstract function getOrElse(Fn $f);
+  public abstract function getOrElse(callable $f);
   
   public abstract function get();
   
