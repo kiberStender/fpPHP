@@ -9,7 +9,6 @@
 namespace fp\maybe;
 
 class Just extends Maybe {
-    private static $just_ = null;
     private $value;
     
     private function __construct($value) {
