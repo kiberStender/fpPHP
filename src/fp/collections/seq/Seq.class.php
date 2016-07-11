@@ -16,14 +16,16 @@
      * @return Seq
      */
     public static function seq() {
-      $args = func_get_args();
-      $seq = Nil::nil();
-
-      foreach ($args as $x) {
-        $seq = $seq->cons($x);
-      }
-
-      return $seq;
+      
+      $construct = function (array $args) use(&$construct){
+        if (sizeof($args) === 0) {
+          return Nil::nil();
+        } else {
+          return $construct(array_slice($args, 1))->cons($args[0]);
+        }
+      };
+      
+      return $construct(func_get_args());
     }
 
     protected function empty_() {
