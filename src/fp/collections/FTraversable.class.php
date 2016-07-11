@@ -6,7 +6,13 @@
  * @author sirkleber
  */
 
-abstract class FTraversable extends Monad{
+namespace fp\collections;
+
+use fp\typeclasses\Monad;
+use fp\maybe\Just;
+use fp\maybe\Nothing;
+
+abstract class FTraversable extends Monad {
   /**
    * @return Boolean Description
    */
@@ -73,40 +79,72 @@ abstract class FTraversable extends Monad{
   public abstract function concat(FTraversable $prefix);
   
   public final function __toString(){
-    return "{$this->prefix()}({$this->foldLeft("", new ToStringFrm($this->toStringFrmt()))})";
+      return "{$this->prefix()}({$this->foldLeft("", $this->toStringFrmt())})";
   }
   
   protected abstract function prefix();
   
+  /**
+   * return callable
+   */
   protected abstract function toStringFrmt();
   
+  /**
+   * The traversable length
+   * @return int
+   */
   public function length(){
-    return $this->foldLeft(0, new LengthFoldLeft());
+    return $this->foldLeft(0, function($acc, $_){
+        return $acc + 1;
+    });
   }
   
-  public function filter(Fn1 $p){
-    return $this->foldRight($this->empty_(), new FilterFoldRight($p));
+  /**
+   * A function to traverse the container and matches a given value
+   * @param callable $p
+   * @return FTraversable
+   */
+  public function filter(callable $p){
+    return $this->foldRight($this->empty_(), function ($x, $acc) use($p){
+      if ($p($x)) {
+        return $acc->cons($x);
+      } else {
+        return $acc;
+      }
+    });
   }
   
-  public function filterNot(Fn1 $p){
-    return $this->filter(new FilterNot($p));
+  /**
+   * A function to traverse the container and return all items that does not 
+   * matches the predicate
+   * @param callable $p
+   * @return FTraversable
+   */
+  public function filterNot(callable $p){
+    return $this->filter(function($x) use($p){return !$p($x);});
   }
   
-  public final function partition(Fn1 $p){
+  /**
+   * A function that split the container in two sides. One that matches
+   * the given predicate and other that does not.
+   * @param callable $p
+   * @return FTraversable
+   */
+  public final function partition(callable $p){
     return array($this->filter($p), $this->filterNot($p));
   }
   
   /**
-   * 
-   * @param Fn1 $p
+   * Function to find a given element
+   * @param callable $p
    * @return Maybe
    */
-  public function find(Fn1 $p){
+  public function find(callable $p){
     if($this->isEmpty()){
-      return Nothing::Nothing();
+      return Nothing::nothing();
     } else {
-      if($p->apply($this->head())){
-        return new Just($this->head());
+      if($p($this->head())){
+        return Just::just($this->head());
       } else {
         return $this->tail()->find($p);
       }
@@ -117,104 +155,70 @@ abstract class FTraversable extends Monad{
    * @return Boolean
    */
   public function contains($item){
-    return $this->find(new FindContains($item)) instanceof Just;
+    return $this->find(function($x) use($item){return $item == $x;}) instanceof Just;
   }
   
+  /**
+   * A function to split the container in two based on the divisor element
+   * @param int $n The divisor element
+   * @return array A size 2 array that contains the splited container
+   */
   public abstract function splitAt($n);
   
-  public function foldLeft($acc, Fn2 $f){
+  /**
+   * Function to transform the container in any other type based on acc type
+   * starting from the first element of the traversable
+   * @param type $acc the initial value of the transformation
+   * @param callable $f the function that will transform each element
+   * @return type
+   */
+  public function foldLeft($acc, callable $f){
     if($this->isEmpty()){
       return $acc;
     } else {
-      return $this->tail()->foldLeft($f->apply($acc, $this->head()), $f);
+      return $this->tail()->foldLeft($f($acc, $this->head()), $f);
     }
   }
   
-  public function foldRight($acc, Fn2 $f){
+  /**
+   * Function to transform the container in any other type based on acc type
+   * starting from the last element of the traversable
+   * @param type $acc the initial value of the transformation
+   * @param callable $f the function that will transform each element
+   * @return type
+   */
+  public function foldRight($acc, callable $f){
     if($this->isEmpty()){
       return $acc;
     } else {
-      return $f->apply($this->head(), $this->tail()->foldRight($acc, $f));
+      return $f($this->head(), $this->tail()->foldRight($acc, $f));
     }
   }
   
-  public function map(Fn1 $f) {
+  
+  /**
+   * Function to transform this container in another continer with different or same type
+   * @param callable $f
+   * @return FTraversable
+   */
+  public function map(callable $f) {
     if($this->isEmpty()){
       return $this->empty_();
     } else {
-      return $this->tail()->map($f)->cons($f->apply($this->head()));
+      return $this->tail()->map($f)->cons($f($this->head()));
     }
   }
   
-  public function flatMap(Fn1 $f) {
+  /**
+   * Function to traverse and concatenate two traversables
+   * @param callable $f
+   * @return FTraversable
+   */
+  public function flatMap(callable $f) {
     if($this->isEmpty()){
       return $this->empty_();
     } else {
-      return $this->tail()->flatMap($f)->concat($f->apply($this->head()));
+      return $this->tail()->flatMap($f)->concat($f($this->head()));
     }
-  }
-}
-
-class ToStringFrm implements Fn2{
-  private $frmt;
-  
-  function __construct(Fn2 $frmt) {
-    $this->frmt = $frmt;
-  }
-  
-  public function apply($acc, $item) {
-    return $this->frmt->apply($acc, $item);
-  }
-}
-
-class SumFoldLeft implements Fn2{
-  public function apply($acc, $item) {
-    return $acc + $item;
-  }
-}
-
-class LengthFoldLeft implements Fn2{
-  public function apply($a, $b) {
-    return $a + 1;
-  }
-}
-
-class FilterFoldRight implements Fn2 {
-  private $p;
-  
-  public function __construct(Fn1 $p) {
-    $this->p = $p;
-  }
-  
-  public function apply($item, $acc) {
-    if($this->p->apply($item)){
-      return $acc->cons($item);
-    } else {
-      return $acc;
-    }
-  }
-}
-
-class FilterNot implements Fn1{
-  private $p;
-  
-  public function __construct(Fn1 $p) {
-    $this->p = $p;
-  }
-  
-  public function apply($item) {
-    return !$this->p->apply($item);
-  }
-}
-
-class FindContains implements Fn1{
-  private $item;
-  
-  function __construct($item) {
-    $this->item = $item;
-  }
-  
-  public function apply($a) {
-    return $this->item == $a;
   }
 }
