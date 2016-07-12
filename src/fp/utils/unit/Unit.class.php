@@ -17,5 +17,9 @@
       
       return self::$_unit;
     }
+    
+    public function __toString() {
+      return "Unit()";
+    }
   }
   
