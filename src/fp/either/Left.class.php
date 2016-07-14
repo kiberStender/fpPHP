@@ -9,8 +9,13 @@
    */
   class Left extends Either{
     private $value;
-    function __construct($value) {
+    
+    private function __construct($value) {
       $this->value = $value;
+    }
+    
+    public static function left($value){
+      return new Left($value);
     }
 
     public function isLeft() {
@@ -28,7 +33,5 @@
     public function __toString() {
       return "Left($this->value)";
     }
-
-//put your code here
   }
   

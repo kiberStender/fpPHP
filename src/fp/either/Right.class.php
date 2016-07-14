@@ -8,14 +8,18 @@
    * @author sirkleber
    */
   class Right extends Either{
-    private $value_;
+    private $value;
     
-    function __construct($value_) {
-      $this->value_ = $value_;
+    private function __construct($value) {
+      $this->value = $value;
+    }
+    
+    public static function right($value){
+      return new Right($value);
     }
 
     public function value() {
-      return $this->value_;
+      return $this->value;
     }
 
     public function isLeft() {
@@ -27,7 +31,7 @@
     }
 
     public function __toString() {
-      return "Right($this->value_)";
+      return "Right($this->value)";
     }
   }
   
