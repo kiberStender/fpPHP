@@ -62,9 +62,12 @@ This library uses namespace with java style of directories, so if you want to lo
 I'm planning to add Set classes (a set of classes that sort the 'internal' array by the key), Range class: something like 
 
 ```php
-From::from(1)->to(10) 
+Range::from(1)->to(10) 
+# or
+Range::from('a')->to('z')
 ```
-and return an Seq starting from 1 and finishing in 10. A functional abstract Controller class with methods to do the IO (a.k.a echo and print) in something similar to Scala PlayFramework 
+and return an Seq starting from 1 and finishing in 10 or a Seq starting from a and finishing in z. 
+A functional abstract Controller class with methods to do the IO (a.k.a echo and print) in something similar to Scala PlayFramework 
 ```scala
   def hi = Action(Ok("Hi").as("application/json"))
 ```
