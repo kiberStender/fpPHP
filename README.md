@@ -5,7 +5,7 @@ The same old fpJava project applied in PHP
 
 A basic library containing the most basic set of functional structures like Seq, Map, Either, FTry (A copy of Scala Twitter Try class), Maybe (Scala Option set of classes) using Monad and Functor as much as possible and avoid $variable = mutacao.
 
-This lis contains a persistence library that tries to emulate Scala Anorm library. In order to use it correctly you must create a file named conf in resources folder placed in application's root folder. This file is a property file like the above sample:
+This lis contains a persistence library that tries to emulate Scala Anorm library. In order to use it correctly you must create a file named conf in resources folder placed in application's root folder. This file is a property file like the below sample:
 
 ```conf
 #/resources/conf.properties
