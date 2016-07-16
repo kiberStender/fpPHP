@@ -90,7 +90,7 @@
           $result = $fn($pdo);
           $pdo = null;
           
-          return Right::right($result);
+          return $result;
         }
       );
     }

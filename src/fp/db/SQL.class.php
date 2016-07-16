@@ -10,13 +10,14 @@
 
   use fp\collections\seq\Seq;
   use fp\collections\map\Map;
+  use fp\maybe\Maybe;
   use fp\utils\unit\Unit;
+  use fp\either\Left;
+  use fp\either\Right;
   use PDO;
 
   class SQL {
-
     private $query;
-    private $pdo;
     private $m;
 
     /**
@@ -25,14 +26,40 @@
      * @param string $query
      * @return \SQL
      */
-    public static function sql(PDO $pdo, $query) {
-      return new SQL($pdo, $query, Map::map_());
+    public static function sql($query) {
+      return new SQL($query, Map::map_());
     }
 
-    private function __construct(PDO $pdo, $query, Map $m) {
-      $this->pdo = $pdo;
+    private function __construct($query, Map $m) {
       $this->query = $query;
       $this->m = $m;
+    }
+    
+    /**
+     * 
+     * @param callable $f PDOStatement -> Any
+     * @return \fp\either\Either
+     */
+    private function perform(callable $f){
+      $that = $this;
+      return function(PDO $pdo) use($that, $f){
+        $st = $pdo->prepare($this->query);
+        
+        $that->m->map(function($tp)use(&$st) {
+          list($k, $v) = $tp;
+          $st->bindValue($k, $v);
+          return Unit::unit();
+        });
+        
+        $st->execute();
+        $error = $st->errorInfo();
+        
+        if(isset($error[1])){
+          return Left::left($error);
+        } else {
+          return Right::right($f($st));
+        }
+      };
     }
 
     /**
@@ -41,10 +68,7 @@
      * @return SQL
      */
     public function on(Map $m) {
-      return new SQL($this->pdo, $this->query, $m->map(function($tp) {
-        list($k, $v) = $tp;
-        return array(":$k", $v);
-      }));
+      return new SQL($this->query, $m);
     }
 
     /**
@@ -54,23 +78,24 @@
      * @return A
      */
     public function as_(callable $f) {
-      $st = $this->pdo->prepare($this->query);
-
-      $this->m->map(function($tp)use(&$st) {
-        list($k, $v) = $tp;
-        $st->bindValue($k, $v);
-        return Unit::unit();
+      return $this->perform(function($st) use($f){
+        $arr = Seq::seq();
+        
+        foreach ($st as $value) {
+          $row = new Row();
+          
+          foreach ($value as $k => $v){
+            if(!is_numeric($k)){
+              $row = $row->withColumn(array($k, $v));
+            }
+          }
+          $arr = $arr->cons($row);
+        }
+        
+        return $arr->map($f)
+            ->filter(function(Maybe $mb){return $mb->isDefined();})
+            ->map(function(Maybe $mb){return $mb->get();});
       });
-
-      $st->execute();
-
-      $arr = Seq::seq();
-
-      foreach ($st as $value) {
-        $arr = $arr->cons($value);
-      }
-
-      return $f($arr);
     }
 
     /**
@@ -78,16 +103,9 @@
      * @return int
      */
     public function executeUpdate() {
-      $st = $this->pdo->prepare($this->query);
-
-      $this->m->map(function($tp)use(&$st) {
-        list($k, $v) = $tp;
-        $st->bindValue($k, $v);
-        return Unit::unit();
-      });
-
-      $st->execute();
-      return $st->rowCount();
+      return $this->perform(function($st){
+        return $st->rowCount();
+      });      
     }
 
   }
