@@ -26,7 +26,7 @@ class Nothing extends Maybe{
     }
     
     public function getOrElse(callable $f) {
-        return $f->apply();
+        return $f();
     }
     
     public function get() {

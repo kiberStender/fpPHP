@@ -15,7 +15,7 @@ abstract class Maybe extends Monad{
     if($this instanceof Nothing){
       return $this;
     } else {
-      return Just::just($f->apply($this->get()));
+      return Just::just($f($this->get()));
     }
   }
   
@@ -23,7 +23,7 @@ abstract class Maybe extends Monad{
     if($this instanceof Nothing){
       return $this;
       } else {
-        return $f->apply($this->get());
+        return $f($this->get());
       }
   }
   
