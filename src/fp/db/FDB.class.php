@@ -86,6 +86,7 @@
           return Left::left($error);
         },
         function(PDO $pdo) use($fn){
+          $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
           $result = $fn($pdo);
           $pdo = null;
           
