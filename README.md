@@ -59,14 +59,14 @@ This library uses namespace with java style of directories, so if you want to lo
 
 ## Further planes
 
-I'm planning to add Set classes (a set of classes that sort the 'internal' array by the key), Range (
+I'm planning to add Set classes (a set of classes that sort the 'internal' array by the key), Range 
 Something like 
 
 ```php
 From::from(1)->to(10) 
 ```
-and return an Seq stating from 1 and finishing in 10) a functional abstract Controller class with methods to do the IO (a.k.a echo and print) in something similar to Scala PlayFramework 
+and return an Seq stating from 1 and finishing in 10. A functional abstract Controller class with methods to do the IO (a.k.a echo and print) in something similar to Scala PlayFramework 
 ```scala
   def hi = Action(Ok("Hi").as("application/json"))
 ```
-If possible I will try to wrap PHP Curl and Stream function in a function OO style
+If possible I will try to wrap PHP Curl and Stream function in a fancy OO style
