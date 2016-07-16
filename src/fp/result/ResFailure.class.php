@@ -26,7 +26,7 @@
       return [
           'failed' => true,
           'description' => $this->description,
-          'result' => $this->value
+          'result' => ''
       ];
     }
   }
