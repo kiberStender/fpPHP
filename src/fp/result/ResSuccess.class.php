@@ -34,7 +34,7 @@
     }
 
     public function __toString() {
-      return "Result({$this->value})";
+      return "Success({$this->value})";
     }
 
   }

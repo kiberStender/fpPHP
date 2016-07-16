@@ -31,7 +31,7 @@
     }
 
     public function __toString()  {
-      return "Result({$this->description})";
+      return "Failure({$this->description})";
     }
 
   }
