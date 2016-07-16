@@ -30,4 +30,9 @@ class Just extends Maybe {
     public function __toString() {
         return "Just($this->value)";
     }
-}
+
+    public function isDefined() {
+      return true;
+    }
+
+  }

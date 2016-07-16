@@ -36,4 +36,9 @@ class Nothing extends Maybe{
     public function __toString() {
         return "Nothing";
     }
-}
+
+    public function isDefined() {
+      return false;
+    }
+
+  }
