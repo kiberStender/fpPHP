@@ -1,35 +1,10 @@
-<?php
-  function my_autoloader($class) {
-    $arr = array(
-      #fn
-      "Fn" => "fn/Fn",
-      "Fn1" => "fn/Fn1",
-      "Fn2" => "fn/Fn2",
-      #typeclasses
-      "Functor" => "typeclasses/Functor",
-      "Monad" => "typeclasses/Monad",
-      #Maybe
-      "Just" => "maybe/Just",
-      "Maybe" => "maybe/Maybe",
-      "Nothing" => "maybe/Nothing",
-      #collections
-      "FTraversable" => "collections/FTraversable",
-      #collections.seq
-      "Cons" => "collections/seq/Cons",
-      "Nil" => "collections/seq/Nil",
-      "Seq" => "collections/seq/Seq",
-      #collections.map
-      "EmptyMap" => "collections/map/EmptyMap",
-      "KVMap" => "collections/map/KVMap",
-      "Map" => "collections/map/Map",
-      #state
-      "State" => "state/State"
-      
-    );
+<?php  
+  spl_autoload_register(function($class){
+    $file = './' . str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.class.php';
     
-    if(isset($arr[$class])){
-      include_once 'src/fp/' . $arr[$class] . '.class.php';
+    if (file_exists($file)) {
+      include_once $file;
+    } else {
+      throw new Exception('Non-existing class: ' . $class);
     }
-  }
-  
-  spl_autoload_register('my_autoloader');
+  });
