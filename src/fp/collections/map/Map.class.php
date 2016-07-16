@@ -20,15 +20,15 @@
      */
     public static final function map_() {
 
-      function construct(array $args) {
+      $construct = function(array $args) use(&$construct) {
         if (sizeof($args) === 0) {
           return EmptyMap::EmptyMap();
         } else {
-          return construct(array_slice($args, 1))->cons($args[0]);
+          return $construct(array_slice($args, 1))->cons($args[0]);
         }
-      }
+      };
 
-      return construct(func_get_args());
+      return $construct(func_get_args());
     }
 
     protected function empty_() {
