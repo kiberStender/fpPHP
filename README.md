@@ -7,10 +7,12 @@ A basic library containing the most basic set of functional structures like Seq,
 
 This lis contains a persistence library that tries to emulate Scala Anorm library. In order to use it correctly you must create a file named conf in resources folder placed in application's root folder. This file is a property file like the above sample:
 
-resources/conf.properties
+```conf
+#/resources/conf.properties
 db.urlconn=sqlite:./resources/db.sq3
 db.user=username #in case it has
 db.pass=password#in case it has
+```
 
 The usage is simple (and if you have used Anorm you will find it very similar (that's the main idea ^^)):
 
