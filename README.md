@@ -53,3 +53,14 @@ function dbInsertSample(){
   );
 }
 ```
+
+This library has it's own autoloader, in case you want to use it, just put the fp folder (inside src directory) and include the autoloader.php file in the script you will call the classes.
+This library uses namespace with java style of directories, so if you want to load manually fp\collections\seq\Seq class you must have include the file /fp/collections/seq/Seq.class.php in your file, and it's dependencies like Traversable and Monad files. And you must use the 'use' keyword. If you use the autoloader right, you will not need to require or include any classes, only import with 'use' and actually use it. All classes has simple DSL, you never will need to instantiate manually with 'new'. For Seq you have Seq::seq(1, 2, 3, 4) or Seq::seq('a', 'b', 'c') and for Map you have Map::map_(array('key', 'value'), array('key', 'value')). Php has it's natural tuples: array. So instead of reinventing the wheel I used array syntax as the tuple substitute.
+
+## Further planes
+
+I'm planning to add Set classes (a set of classes that sort the 'internal' array by the key), Range (Something like From(1)->to(10) and return an Seq stating from 1 and finishing in 10) a functional abstract Controller class with methods to do the IO (a.k.a echo and print) in something similar to Scala PlayFramework 
+```scala
+  def hi = Action(Ok("Hi").as("application/json"))
+```
+If possible I will try to wrap PHP Curl and Stream function in a function OO style
