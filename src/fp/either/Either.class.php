@@ -13,7 +13,7 @@
     public abstract function isLeft();
     public abstract function __toString();
 
-    public function fold(callable $r, callable $l){
+    public function fold(callable $l, callable $r){
       if($this->isRight()){
         return $r($this->value());
       } else {
