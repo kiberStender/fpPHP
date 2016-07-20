@@ -19,8 +19,7 @@
      * @return Map
      */
     public static final function map_(...$args) {
-
-      function construct(array $args) {
+      $construct = function(array $args){
         $map = EmptyMap::emptyMap();
         
         foreach($args as $item){
@@ -28,9 +27,9 @@
         }
         
         return $map;
-      }
+      };
 
-      return construct($args);
+      return $construct($args);
     }
 
     protected function empty_() {
@@ -144,4 +143,3 @@
     }
 
   }
-  
