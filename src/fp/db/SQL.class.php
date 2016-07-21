@@ -51,7 +51,6 @@
           return $acc;
         })->execute();
         
-        //$st->execute();
         $error = $st->errorInfo();
         
         if(isset($error[1])){
@@ -63,12 +62,12 @@
     }
 
     /**
-     * Funtion for insert, delete, updates and procedures sql statements
+     * Function for insert, delete, updates and procedures sql statements
      * @param Map $m
      * @return SQL
      */
-    public function on(Map $m) {
-      return new SQL($this->query, $m);
+    public function on(...$m) {
+      return new SQL($this->query, $this->m->concat(Map::map_(...$m)));
     }
 
     /**
