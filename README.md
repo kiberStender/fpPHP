@@ -3,9 +3,26 @@ fpPHP
 
 The same old fpJava project applied in PHP
 
-A basic library containing the most basic set of functional structures like Seq, Map, Either, FTry (A copy of Scala Twitter Try class), Maybe (Scala Option set of classes) using Monad and Functor as much as possible and avoid $variable = mutacao.
+A basic library containing the most basic set of functional structures like Seq, Map, Either, FTry (A copy of Scala Twitter Try class), Maybe (Scala Option set of classes) using Monad and Functor as much as possible and avoid $variable mutation.
 
-This lis contains a persistence library that tries to emulate Scala Anorm library. In order to use it correctly you must create a file named conf in resources folder placed in application's root folder. This file is a property file like the below sample:
+##Maybe
+```php
+use fp\maybe\{Just, Nothing, Maybe};
+
+function div(int $a, int $b): Maybe{
+  if($b == 0){
+    return Nothing::nothing();
+  } else {
+    return Just::just($a / $b);
+  }
+}
+
+echo div(2, 0)->map(function($x){return $x * 3;})->getOrElse(function(){return "Impossible to divide by zero";});
+```
+The above example shows how to use The basics of Maybe as a simple container to work with simple errors. It tries to use as much as possible the lazy evaluation
+using functions to handle the inside value instead of checking with if and else, decreasing the amount of code to be written
+
+This lib contains a persistence library that tries to emulate Scala Anorm library. In order to use it correctly you must create a file named conf in resources folder placed in application's root folder. This file is a property file like the below sample:
 
 ```conf
 #/resources/conf.properties
@@ -42,7 +59,7 @@ function dbSelectSample(){
 }
 ```
 
-The first example is way much simpler. Just ensur to finish with as_ when you want to select something from the Database. Now if you want to insert, delete or update any row, this lib has the executeUpdate that do the same, return a function with PDO as only parameter, but when applied it returns the number of the rows affected by the query.
+The first example is way much simpler. Just ensure to finish with as_ when you want to select something from the Database. Now if you want to insert, delete or update any row, this lib has the executeUpdate that do the same, return a function with PDO as only parameter, but when applied it returns the number of the rows affected by the query.
 
 ```php
 function dbInsertSample(){
