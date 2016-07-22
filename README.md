@@ -26,7 +26,7 @@ using functions to handle the inside value instead of checking with if and else,
 
 ##Seq
 ```php
-use fp\collections\seq\{Seq}
+use fp\collections\seq\Seq;
 
 echo Seq::seq(1, 2, 3, 4, 5)
   ->map(function($x){return $x * 3})
@@ -36,6 +36,22 @@ echo Seq::seq(1, 2, 3, 4, 5)
 ```
 Seq is the equivalent of a functional array, and the above example shows how simple it is to work with using the OO syntax. In this example I multiplied all item by 3, and then I have filtered only the numbers lesser than 8,
 and then I summed all that left with another Seq showing the power of the flatMap with map and finally I joined all numbers in a single number with the help of the foldLeft method
+
+##Map
+```php
+use fp\collections\map\Map;
+
+echo Map::map(array('name', 'kleber'), array('surname', 'stender'), array('job', 'dev'))
+  ->map(function($tuple){
+    list($key, $value) = $tuple;
+    return array($key, ucfirst($value));
+  })
+  ->get('name')->getOrElse(function(){return 'Key not found';});
+```
+Map is a array like structure with hold "tuples" instead of simple values. It does not care about the position in the array since you provide it's key to get the value, and instead of throwing an Exception the method get returns 
+a Maybe instance so you can deal with the value with map, flatMap or getOrElse. Otherwise it is a normal array, so you can filter, map, fold, etc.
+
+##Persistence mini-lib
 
 This lib contains a persistence library that tries to emulate Scala Anorm library. In order to use it correctly you must create a file named conf in resources folder placed in application's root folder. This file is a property file like the below sample:
 
