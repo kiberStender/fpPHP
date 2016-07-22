@@ -17,7 +17,9 @@ function div(int $a, int $b): Maybe{
   }
 }
 
-echo div(2, 0)->map(function($x){return $x * 3;})->getOrElse(function(){return "Impossible to divide by zero";});
+echo div(2, 0)
+  ->map(function($x){return $x * 3;})
+  ->getOrElse(function(){return "Impossible to divide by zero";});
 ```
 The above example shows how to use The basics of Maybe as a simple container to work with simple errors. It tries to use as much as possible the lazy evaluation
 using functions to handle the inside value instead of checking with if and else, decreasing the amount of code to be written
