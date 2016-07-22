@@ -20,7 +20,7 @@ The usage is simple (and if you have used Anorm you will find it very similar (t
 function dbSelectSample(){
   FDB::db()->withConnection(
     SQL::sql('select foo from bar where birl = :value')
-    ->on(Map::map_(array(':value', 'A value')))
+    ->on(array(':value', 'A value'))
     ->as_(function(Row $row){
       return $row->getColumn('foo')->map(function($foo){return new Bar($foo)});
     })
@@ -34,7 +34,7 @@ This function will return an Either[Bar, String]. And if you in any case missed 
 function dbSelectSample(){
   FDB::db()->withConnection(function(PDO $pdo){
     return (SQL::sql('select foo from bar where birl = :value')
-    ->on(Map::map_(array(':value', 'A value')))
+    ->on(array(':value', 'A value'))
     ->as_(function(Row $row){
       return $row->getColumn('foo')->map(function($foo){return new Bar($foo)});
     }))($pdo);
@@ -48,7 +48,7 @@ The first example is way much simpler. Just ensur to finish with as_ when you wa
 function dbInsertSample(){
   FDB::db()->withConnection(
     SQL::sql('insert into bar values(:foo, :birl);')
-    ->on(Map::map_(array(':foo', 'A foo value'), array(':birl', 'A value')))
+    ->on(array(':foo', 'A foo value'), array(':birl', 'A value'))
     ->executeUpdate()
   );
 }
