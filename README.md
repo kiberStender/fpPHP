@@ -24,6 +24,19 @@ echo div(2, 0)
 The above example shows how to use The basics of Maybe as a simple container to work with simple errors. It tries to use as much as possible the lazy evaluation
 using functions to handle the inside value instead of checking with if and else, decreasing the amount of code to be written
 
+##Seq
+```php
+use fp\collections\seq\{Seq}
+
+echo Seq::seq(1, 2, 3, 4, 5)
+  ->map(function($x){return $x * 3})
+  ->filter(function($x){return $x < 8;})
+  ->flatMap(function($x){return Seq::seq(6, 7, 8, 9, 10)->map(function($y) use($x){return $x + $y;})})
+  ->foldLeft(0, function($acc, $x){ return $acc + $x;});
+```
+Seq is the equivalent of a functional array, and the above example shows how simple it is to work with using the OO syntax. In this example I multiplied all item by 3, and then I have filtered only the numbers lesser than 8,
+and then I summed all that left with another Seq showing the power of the flatMap with map and finally I joined all numbers in a single number with the help of the foldLeft method
+
 This lib contains a persistence library that tries to emulate Scala Anorm library. In order to use it correctly you must create a file named conf in resources folder placed in application's root folder. This file is a property file like the below sample:
 
 ```conf
