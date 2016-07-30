@@ -24,13 +24,21 @@
       $file = new SplFileObject('./resources/conf.properties');
       
       while(!$file->eof()){
-        list($key, $value) = explode('=', $file->fgets(), 2);
+        $val = $file->fgets();
         
-        $this->map = $this->map->cons(array($key, trim(preg_replace('/\s+/', '', $value))));
+        if($val !== '' or $this->startsWith($val, '#')){
+          list($key, $value) = explode('=', $file->fgets(), 2);
         
+          $this->map = $this->map->cons(array($key, trim(preg_replace('/\s+/', '', $value))));
+        }
       }
       
       $file = null;
+    }
+    
+    private function startsWith($haystack, $needle) {
+      // search backwards starting from haystack length characters from the end
+      return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== false;
     }
     
     /**
