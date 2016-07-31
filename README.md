@@ -20,6 +20,7 @@ function div(int $a, int $b): Maybe{
 echo div(2, 0)
   ->map(function($x){return $x * 3;})
   ->getOrElse(function(){return "Impossible to divide by zero";});
+// Echo Impossible to divide by zero
 ```
 The above example shows how to use The basics of Maybe as a simple container to work with simple errors. It tries to use as much as possible the lazy evaluation
 using functions to handle the inside value instead of checking with if and else, decreasing the amount of code to be written
@@ -47,9 +48,43 @@ echo Map::map(array('name', 'kleber'), array('surname', 'stender'), array('job',
     return array($key, ucfirst($value));
   })
   ->get('name')->getOrElse(function(){return 'Key not found';});
+// Echo Kleber
 ```
-Map is a array like structure with hold "tuples" instead of simple values. It does not care about the position in the array since you provide it's key to get the value, and instead of throwing an Exception the method get returns 
+Map is an array like structure with hold "tuples" instead of simple values. It does not care about the position in the array since you provide it's key to get the value, and instead of throwing an Exception the method get returns 
 a Maybe instance so you can deal with the value with map, flatMap or getOrElse. Otherwise it is a normal array, so you can filter, map, fold, etc.
+
+##Either
+
+```php
+  use fp\either\{Left, Right, Either};
+
+  function div($a, $b): Either {
+    if($b === 0){
+      return Left::left('You cannot divide anything by zero');
+    } else {
+      return Right::right($a / $b);
+    }
+  }
+
+  echo div(4, 2)->fold(
+    function($error){
+      return $error;
+    },
+    function($result){
+      return "4 / 2  = $result";
+    }
+  );
+  //Echo 4 / 2  = 2
+```
+
+Either is a structure similar to Maybe, but instead of focusing on the value, it give you the chance
+to control both error and non error values. It is a way of returning two possible values.
+(In the above example String and Double, represented by Either[String, Double]). There is nothing
+that says to you which the is error and which is the value, but the default use is to set errors in the Left side
+and values in the Right side. Don't be fooled by the name, it can return two values. It only carries
+one value, either the value or the error. It has only one process method: fold. And it 
+gets two parameters, one is a function to be called if the object is a Left and the other a function
+to be called if the object is a Right.
 
 ##Persistence mini-lib
 
