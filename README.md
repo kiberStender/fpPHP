@@ -92,9 +92,9 @@ This lib contains a persistence library that tries to emulate Scala Anorm librar
 
 ```conf
 #/resources/conf.properties
-db.urlconn=sqlite:./resources/db.sq3
-db.user=username #in case it has
-db.pass=password#in case it has
+db.urlconn=sqlite:"./resources/db.sq3"
+db.user="username" #in case it has
+db.pass="password"#in case it has
 ```
 
 The usage is simple (and if you have used Anorm you will find it very similar (that's the main idea ^^)):
