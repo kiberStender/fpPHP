@@ -81,7 +81,7 @@ Either is a structure similar to Maybe, but instead of focusing on the value, it
 to control both error and non error values. It is a way of returning two possible values.
 (In the above example String and Double, represented by Either[String, Double]). There is nothing
 that says to you which the is error and which is the value, but the default use is to set errors in the Left side
-and values in the Right side. Don't be fooled by the name, it can return two values. It only carries
+and values in the Right side. Don't be fooled by the name, it can't return two values. It only carries
 one value, either the value or the error. It has only one process method: fold. And it 
 gets two parameters, one is a function to be called if the object is a Left and the other a function
 to be called if the object is a Right.
