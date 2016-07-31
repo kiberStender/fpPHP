@@ -20,20 +20,18 @@
     private $map;
     
     private function __construct() {
-      $this->map = Map::map_();
-      $file = new SplFileObject('./resources/conf.properties');
+      $configs = parse_ini_file('./resources/conf.properties');
       
-      while(!$file->eof()){
-        $val = $file->fgets();
+      if(sizeof($configs) > 0){
+        $this->map = Map::map_();
         
-        if($val !== '' or $this->startsWith($val, '#')){
-          list($key, $value) = explode('=', $file->fgets(), 2);
-        
-          $this->map = $this->map->cons(array($key, trim(preg_replace('/\s+/', '', $value))));
+        foreach ($configs as $key => $value){
+          $this->map = $this->map->cons(array($key, $value));
         }
+      } else {
+        return Map::map_();
       }
       
-      $file = null;
     }
     
     private function startsWith($haystack, $needle) {
