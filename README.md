@@ -86,6 +86,35 @@ one value, either the value or the error. It has only one process method: fold. 
 gets two parameters, one is a function to be called if the object is a Left and the other a function
 to be called if the object is a Right.
 
+## FTry
+
+```php
+  use fp\ftry\FTry;
+  use \Exception;
+
+  function div($a, $b): FTry{
+    if($b === 0){
+      throw new Exception('A fake Java AritmeticException');
+    } else {
+      return $a \ $b;
+    }
+  }
+
+  echo FTry::ftry(function(){return div(8, 2);})
+  ->map(function($x){ return $x * 2; })
+  ->flatMap(function($x){
+    return FTry::ftry(function(){ return div(4, 0)})
+    ->map(function($y) use($x){ return $x + $y;});
+  });
+  // Echo A fake Java AritmeticException
+```
+
+FTry is another structure to prevent error in functional style. It was created by Twitter on Scala
+in order to use Java libraries with Scala syntax in a function style. Java coders use Exception all over the codes
+to indicate and prevent errors, but functionally speaking, it is awful. So they have created this structure
+to deal with these Java Exception libraries without breaking the functional Scala syntax sugar, and I thought it was 
+a good structure to bring to PHP for the same reason.
+
 ##Persistence mini-lib
 
 This lib contains a persistence library that tries to emulate Scala Anorm library. In order to use it correctly you must create a file named conf in resources folder placed in application's root folder. This file is a property file like the below sample:
