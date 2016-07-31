@@ -114,13 +114,13 @@ function dbSelectSample(){
 This function will return an Either[Bar, String]. And if you in any case missed PDO I simulated a Scala implicit there. The withConnection function requires a function that has one paremeter. The PDO, but the as_ function returns a function that has only one parameter. The PDO so without this caveat we would need to write like that:
 
 ```php
-function dbSelectSample(){
   FDB::db()->withConnection(function(PDO $pdo){
-    return (SQL::sql('select foo from bar where birl = :value')
+    $fn = SQL::sql('select foo from bar where birl = :value')
     ->on(array(':value', 'A value'))
     ->as_(function(Row $row){
       return $row->getColumn('foo')->map(function($foo){return new Bar($foo)});
-    }))($pdo);
+    });
+    return $fn($pdo);
   });
 }
 ```
